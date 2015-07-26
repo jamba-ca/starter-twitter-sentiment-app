@@ -1,0 +1,28 @@
+{
+  "name": "starter-twitter-sentiment",
+  "version": "0.1.1",
+  "description": "A starter Twitter sentiment analysis app",
+  "main": "server.js",
+  "dependencies": {
+    "express" : "^4.6.1",
+	"mongoose" : "^4.0.8",
+    "natural": "^0.1.27",
+    "socket.io": "^1.0.6",
+    "twit": "^1.1.18",
+    "emoji-strip": "latest"
+  },
+  "keywords": [
+    "twitter",
+    "tweets",
+    "sentiment",
+    "analysis",
+    "opinion",
+    "positive",
+    "negative",
+    "real-time",
+    "starter"
+  ],
+  "author": "JAMBA Inc.",
+  "license": "MIT"
+}
+

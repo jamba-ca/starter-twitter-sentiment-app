@@ -1,0 +1,13 @@
+<div class="jumbotron text-center">
+	<h2>What's being said on Twitter about <i>{{keywords}}</i></h2>
+	<div ng-repeat="tweet in tweets" class="text-left alert {{tweet.sentimentClass}}" id="tweet_{{tweet.id}}" role="alert">{{tweet.content}}</div>
+	<p>{{status}}</p>
+</div>
+<div class="text-center">
+	<h4>
+		Sentiment legend:
+		<a href="#" class="btn btn-success btn-default disabled" role="button">Positive</a>
+		<a href="#" class="btn btn-danger btn-default disabled" role="button">Negative</a>
+		<a href="#" class="btn btn-warning btn-default disabled" role="button">Unknown</a>
+	</h4>
+</div>
