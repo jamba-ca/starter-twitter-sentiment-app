@@ -57,7 +57,7 @@ angular.module('MainCtrl', []).controller('MainController', ['$scope', '$route',
 				sentimentViewClass = 'alert-warning';
 			}		
 			if (localStorageService.isSupported) {
-				// add tweet to localStorage
+				// add tweet to localStorage (so client can leave then return later and have this, and other tweets, redisplayed)
 				var storedTweets = localStorageService.get('tweets');
 				if (storedTweets === null) { // no stored tweets yet
 					storedTweets = []; // initialise as an array
