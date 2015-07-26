@@ -3,6 +3,8 @@
 
 This is a simple application using the MEAN stack (MongoDB, ExpressJS, AngularJS, Node.js) to serve as a foundation to help you start building more complex Twitter sentiment analysis projects. 
 
+![screenshot](https://github.com/jamba-ca/starter-twitter-sentiment-app/blob/master/assets/screenshot1.png)
+
 ## Installation
 1. Download the repository
 2. Install npm modules: `npm install`
@@ -18,5 +20,6 @@ This is a simple application using the MEAN stack (MongoDB, ExpressJS, AngularJS
 
 ## Notes
 1. Only collects tweets in english since stop word list is for english
+2. To modify the keyword and location filters, see `app/classifier.js`
 
 If you have any questions or requests, email [dev@jamba.ca](mailto:dev@jamba.ca).
