@@ -15,8 +15,7 @@ This is a simple application using the MEAN stack (MongoDB, ExpressJS, AngularJS
 
 ## To do
 1. Make tweet filters modifiable (keywords, location)
-2. Save tweets to a MongoDB database
-3. Display statistics on positive vs. negative
+2. Display statistics on positive vs. negative
 
 ## Notes
 1. Only collects tweets in english since stop word list is for english

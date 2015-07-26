@@ -49,9 +49,9 @@ angular.module('MainCtrl', []).controller('MainController', ['$scope', '$route',
 		if (displayedTweets.indexOf(tweetId) < 0) {
 			displayedTweets.push(tweetId);
 			var sentimentViewClass;
-			if (String(classification).toLowerCase() == 'positive') {
+			if (classification == 1) {
 				sentimentViewClass = 'alert-success';
-			} else if (String(classification).toLowerCase() == 'negative') {
+			} else if (classification == -1) {
 				sentimentViewClass = 'alert-danger';
 			} else {
 				sentimentViewClass = 'alert-warning';

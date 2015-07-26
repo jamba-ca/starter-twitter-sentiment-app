@@ -1,4 +1,8 @@
-module.exports = function(natural, preProcessor, twitterBot, emojiStripper, io) {
+module.exports = function(natural, preProcessor, twitterBot, emojiStripper, mongoose, dbConfig, io) {
+
+	// create tweet model
+	var tweetSchema = new mongoose.Schema(dbConfig.schemaTweet);
+	var tweetModel = mongoose.model(dbConfig.collectionName, tweetSchema);
 
 	var lastTweetId = 0; // to prevent duplicate tweets (received one after the other) from being processed
 
@@ -28,16 +32,54 @@ module.exports = function(natural, preProcessor, twitterBot, emojiStripper, io) 
 			twitterBot.stream(params, function(tweet) {
 				if ((!tweet.retweeted) && (tweet.text.substring(0,2).toUpperCase() != 'RT')) { // ignore retweets
 					if (lastTweetId != tweet.id) { // ignore duplicates; sometimes saw duplicate tweets arrive via stream API...
-						var classification;
+						var classification, classificationNum;
 						var text = emojiStripper(tweet.text);
 						// run some pre-processing on the tweet
 						var cleanTweet = preProcessor.cleanTweet(text);													
 						// filter only tweets that contain keywords
 						if (wordsInString(text, keyWords)) {
-							classification = classifier.classify(cleanTweet);	
-							io.sockets.emit('stream', classification, text, tweet.id); // send analyzed tweet
-							console.log('['+classification+', Tweet ID:'+tweet.id+'] '+text);
-							lastTweetId = tweet.id;
+							classification = String(classifier.classify(cleanTweet)).toLowerCase();	
+							switch (classification) {
+								case 'positive':
+									classificationNum = 1;
+									break;
+								case 'negative':
+									classificationNum = -1;
+									break;
+								default:
+									classificationNum = 0;
+							}
+							
+							if (typeof tweet.id != 'undefined') { // check for valid tweet structure
+								if (mongoose.connection.readyState > 0) { // we have a database connection open
+									// save tweet to MongoDB
+									console.log('Saving tweet [ID:'+tweet.id+'] to db.');
+									var tweetCoords = [null, null]; // in case tweets don't have coordinates structure
+									if (JSON.stringify(tweet.coordinates) !== 'null') {
+										tweetCoords = [tweet.coordinates.coordinates[1],tweet.coordinates.coordinates[0]];
+									}	
+									var tweetToMongo = new tweetModel({
+										keyWords : keyWords,
+										latLng : tweetCoords,
+										tweetId : tweet.id,
+										tweetDate : tweet.created_at,
+										tweetText : tweet.text,
+										tweetSentiment : classificationNum,
+										userId : tweet.user.id							
+									});
+									tweetToMongo.save(function (err, data) {
+										if (err) console.log(err);
+									});
+								} else {
+									console.log('Cannot save tweet [ID:'+tweet.id+'] to db.');
+								}
+
+								// send analyzed tweet to client via web socket
+								io.sockets.emit('stream', classificationNum, text, tweet.id);
+
+								console.log('['+classification+', Tweet ID:'+tweet.id+'] '+text);
+								lastTweetId = tweet.id;
+							}
 						}
 					}
 				}
