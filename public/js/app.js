@@ -9,11 +9,14 @@ myApp.config(function(localStorageServiceProvider) {
 
 // UI hacks
 $(document).ready(function() {
-
 	// Update nav bar active item when clicked
 	$(".nav a").on("click", function(){
 		$(".nav").find(".active").removeClass("active");
-   		$(this).parent().addClass("active");
+		if ($(this).parent().attr("id") == "navClear") {
+			$('#navHome').addClass("active"); // special case: 'clear history' nav item should not stay active
+		} else {
+	   		$(this).parent().addClass("active"); // clicked nav item should be displayed as active
+	   	}
+	   	$(this).blur();
 	});
-	
 });

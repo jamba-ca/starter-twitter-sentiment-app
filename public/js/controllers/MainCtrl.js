@@ -1,5 +1,9 @@
 angular.module('MainCtrl', []).controller('MainController', ['$scope', '$route', 'socket', 'localStorageService', function ($scope, $route, socket, localStorageService) {
 
+	if (window.location.pathname == '/') {
+		$('#navHome').addClass("active");
+	}
+	
 	$scope.clearHistory = function() {
 		if (localStorageService.isSupported) {
 			localStorageService.remove('keywords');
